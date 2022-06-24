@@ -3,7 +3,7 @@
 """encode/decode base58 in the same way that Bitcoin does"""
 
 import math
-
+import ripemd
 __b58chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 __b58base = len(__b58chars)
 
@@ -58,7 +58,7 @@ def b58decode(v, length):
 
 try:
   import hashlib
-  hashlib.new('ripemd160')
+  #hashlib.new('ripemd160')
   have_crypto = True
 except ImportError:
   have_crypto = False
@@ -67,8 +67,7 @@ def hash_160(public_key):
   if not have_crypto:
     return ''
   h1 = hashlib.sha256(public_key).digest()
-  r160 = hashlib.new('ripemd160')
-  r160.update(h1)
+  r160 = ripemd.new(h1)
   h2 = r160.digest()
   return h2
 
